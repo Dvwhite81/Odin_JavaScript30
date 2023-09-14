@@ -59,7 +59,52 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  /* Make a new function to attach to listener
+     And move eventListener to bottom
 
+  window.addEventListener('keydown', function (e) {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+
+    // If no matching data-key, do nothing (stop the function)
+    if (!audio) return;
+    // Reset sound to start to play quickly over and over
+    audio.currentTime = 0;
+    audio.play();
+
+    // Add class to key for CSS
+    key.classList.add('playing');
+
+  });
+  */
+
+  function playSound(e) {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+
+    // If no matching data-key, do nothing (stop the function)
+    if (!audio) return;
+    // Reset sound to start to play quickly over and over
+    audio.currentTime = 0;
+    audio.play();
+
+    // Add class to key for CSS
+    key.classList.add('playing');
+  }
+
+  // Transition end to remove class (back to normal)
+  function removeTransition(e) {
+    // Skip if not a transform
+    if (e.propertyName !== 'transform') return;
+    // this = key that got called when pressed
+    this.classList.remove('playing');
+  }
+
+  const keys = document.querySelectorAll('.key');
+  // Set listener for each key, called when CSS transition ends
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+  window.addEventListener('keydown', playSound);
 </script>
 
 
